@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
 
-const ContactForm = ({ contacts, addContact }) => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+class ContactForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: '',
+      number: '',
+    };
+  }
 
-  const handleSubmit = (e) => {
+  handleSubmit = (e) => {
     e.preventDefault();
+
+    const { name, number } = this.state;
+    const { contacts, addContact } = this.props;
 
     const isNameExists = contacts.some((contact) => contact.name === name);
 
@@ -16,17 +24,24 @@ const ContactForm = ({ contacts, addContact }) => {
     }
 
     addContact({ id: nanoid(), name, number });
-    setName('');
-    setNumber('');
+    this.setState({ name: '', number: '' });
   };
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} required />
-      <input type="tel" name="number" value={number} onChange={(e) => setNumber(e.target.value)} required />
-      <button type="submit">Add contact</button>
-    </form>
-  );
-};
+  handleChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  render() {
+    const { name, number } = this.state;
+
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <input type="text" name="name" value={name} onChange={this.handleChange} required />
+        <input type="tel" name="number" value={number} onChange={this.handleChange} required />
+        <button type="submit">Add contact</button>
+      </form>
+    );
+  }
+}
 
 export default ContactForm;
