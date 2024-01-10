@@ -1,30 +1,41 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import ContactForm from 'components/ContactForm';
 import ContactList from 'components/ContactList';
 import Filter from 'components/Filter';
 
-export const App = () => {
-  const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState('');
+export class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      contacts: [],
+      filter: '',
+    };
+  }
 
-  const addContact = (newContact) => {
-    setContacts((prevContacts) => [...prevContacts, newContact]);
+  addContact = (newContact) => {
+    this.setState((prevState) => ({ contacts: [...prevState.contacts, newContact] }));
   };
 
-  const deleteContact = (id) => {
-    setContacts((prevContacts) => prevContacts.filter((contact) => contact.id !== id));
+  deleteContact = (id) => {
+    this.setState((prevState) => ({
+      contacts: prevState.contacts.filter((contact) => contact.id !== id),
+    }));
   };
 
-  return (
-    <div>
-      <h1>Phonebook</h1>
-      <ContactForm contacts={contacts} addContact={addContact} />
+  render() {
+    const { contacts, filter } = this.state;
 
-      <h2>Contacts</h2>
-      <Filter filter={filter} onFilterChange={setFilter} />
-      <ContactList contacts={contacts} filter={filter} onDeleteContact={deleteContact} />
-    </div>
-  );
-};
+    return (
+      <div>
+        <h1>Phonebook</h1>
+        <ContactForm contacts={contacts} addContact={this.addContact} />
+
+        <h2>Contacts</h2>
+        <Filter filter={filter} onFilterChange={(value) => this.setState({ filter: value })} />
+        <ContactList contacts={contacts} filter={filter} onDeleteContact={this.deleteContact} />
+      </div>
+    );
+  }
+}
 
 export default App;
