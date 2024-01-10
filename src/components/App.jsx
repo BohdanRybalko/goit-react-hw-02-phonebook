@@ -4,13 +4,10 @@ import ContactList from 'components/ContactList';
 import Filter from 'components/Filter';
 
 export class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      contacts: [],
-      filter: '',
-    };
-  }
+  state = {
+    contacts: [],
+    filter: '',
+  };
 
   addContact = (newContact) => {
     this.setState((prevState) => ({ contacts: [...prevState.contacts, newContact] }));
@@ -22,8 +19,15 @@ export class App extends Component {
     }));
   };
 
+  filterContacts = (contacts, filter) => {
+    return contacts.filter((contact) =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  };
+
   render() {
     const { contacts, filter } = this.state;
+    const filteredContacts = this.filterContacts(contacts, filter);
 
     return (
       <div>
@@ -32,7 +36,7 @@ export class App extends Component {
 
         <h2>Contacts</h2>
         <Filter filter={filter} onFilterChange={(value) => this.setState({ filter: value })} />
-        <ContactList contacts={contacts} filter={filter} onDeleteContact={this.deleteContact} />
+        <ContactList contacts={filteredContacts} onDeleteContact={this.deleteContact} />
       </div>
     );
   }

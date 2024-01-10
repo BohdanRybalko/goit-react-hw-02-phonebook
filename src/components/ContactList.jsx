@@ -4,15 +4,11 @@ import ContactItem from './ContactItem';
 
 class ContactList extends Component {
   render() {
-    const { contacts, filter, onDeleteContact } = this.props;
-
-    const filteredContacts = contacts.filter((contact) =>
-      contact.name.toLowerCase().includes(filter.toLowerCase())
-    );
+    const { contacts, onDeleteContact } = this.props;
 
     return (
       <div>
-        {filteredContacts.map((contact) => (
+        {contacts.map((contact) => (
           <ContactItem key={contact.id} contact={contact} onDeleteContact={onDeleteContact} />
         ))}
       </div>
