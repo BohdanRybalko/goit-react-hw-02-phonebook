@@ -10,6 +10,14 @@ export class App extends Component {
   };
 
   addContact = (newContact) => {
+    const { contacts } = this.state;
+    const isNameExists = contacts.some((contact) => contact.name === newContact.name);
+
+    if (isNameExists) {
+      alert(`${newContact.name} is already in contacts.`);
+      return;
+    }
+
     this.setState((prevState) => ({ contacts: [...prevState.contacts, newContact] }));
   };
 
@@ -32,7 +40,7 @@ export class App extends Component {
     return (
       <div>
         <h1>Phonebook</h1>
-        <ContactForm contacts={contacts} addContact={this.addContact} />
+       <ContactForm contacts={this.state.contacts} addContact={this.addContact} />
 
         <h2>Contacts</h2>
         <Filter filter={filter} onFilterChange={(value) => this.setState({ filter: value })} />
